@@ -1,0 +1,19 @@
+{
+  "id": "csrf-generator-plugin",
+  "name": "CSRF PoC Generator",
+  "version": "1.0.0",
+  "description": "Generate CSRF Proof of Concept payloads from requests",
+  "author": {
+    "name": "Tur24Tur / BugBountyZip",
+    "email": "no-reply@NoBugEscapes.com",
+    "url": "https://github.com/BugBountyzip"
+  },
+  "plugins": [
+    {
+      "kind": "frontend",
+      "id": "csrf-generator-frontend",
+      "name": "CSRF Generator Frontend",
+      "entrypoint": "frontend/script.js"
+    }
+  ]
+}

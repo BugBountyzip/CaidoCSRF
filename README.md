@@ -43,6 +43,12 @@ The plugin supports multiple CSRF payload types:
 4. Choose your desired CSRF payload type from the dropdown
 5. The plugin will automatically generate the appropriate CSRF proof of concept code
 
+![image](https://github.com/user-attachments/assets/7bc67c9c-efc5-418c-ac45-759ad7e21070)
+
+![image](https://github.com/user-attachments/assets/304f45be-306c-4c90-9103-d3a81660e961)
+
+
+
 ## Output Example
 
 ```html

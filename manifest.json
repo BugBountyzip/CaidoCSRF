@@ -1,7 +1,7 @@
 {
   "id": "csrf-generator",
   "name": "CSRF PoC Generator",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Generate CSRF Proof of Concept payloads from requests",
   "author": {
     "name": "Tur24Tur / BugBountyZip",

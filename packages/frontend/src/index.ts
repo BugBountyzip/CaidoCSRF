@@ -235,6 +235,10 @@ export async function init(sdk) {
   `;
   document.head.appendChild(style);
 
+  // Ensure double quotes are encoded to ensure correct HTML generation and prevent accidental XSS
+  const sanitizeValue = (value) => {
+    return String(value).replace(/"/g, '&quot;');
+  };
   
   const parseRequestParams = (request) => {
     try {
@@ -265,8 +269,8 @@ export async function init(sdk) {
         try {
           const jsonData = JSON.parse(body);
           return Object.entries(jsonData).map(([name, value]) => ({
-            name,
-            value: typeof value === 'object' ? JSON.stringify(value) : String(value)
+            name: sanitizeValue(name),
+            value: typeof value === 'object' ? sanitizeValue(JSON.stringify(value)) : sanitizeValue(String(value))
           }));
         } catch (e) {
           console.error('JSON parsing failed:', e);
@@ -279,8 +283,8 @@ export async function init(sdk) {
         .map(param => {
           const [name, ...values] = param.split('=');
           return {
-            name: decodeURIComponent(name),
-            value: decodeURIComponent(values.join('='))
+            name: sanitizeValue(decodeURIComponent(name)),
+            value: sanitizeValue(decodeURIComponent(values.join('=')))
           };
         });
       } catch (error) {

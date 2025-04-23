@@ -236,7 +236,7 @@ export async function init(sdk) {
   document.head.appendChild(style);
 
   // Ensure double quotes are encoded to ensure correct HTML generation and prevent accidental XSS
-  const sanitizeValue = (value:string ): string => {
+  const sanitizeValue = (value) => {
     return String(value).replace(/"/g, '&quot;');
   };
   

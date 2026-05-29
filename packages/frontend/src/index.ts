@@ -4,187 +4,248 @@ export async function init(sdk) {
   style.textContent = `
     .csrf-modal-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0, 0, 0, 0.85);
+      inset: 0;
+      background: rgba(5, 6, 8, 0.68);
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 1000;
+      padding: 24px;
     }
 
     .csrf-modal {
-      background-color: #1a1a1a;
-      border-radius: 12px;
-      width: 85%;
-      max-width: 1200px;
-      max-height: 90vh;
+      width: min(1180px, calc(100vw - 48px));
+      height: min(760px, calc(100vh - 48px));
+      background: #1f2229;
+      border: 1px solid #3a3d46;
+      border-radius: 6px;
+      color: #d7dbe3;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.24);
+      overflow: hidden;
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
     }
 
     .csrf-modal-header {
-      padding: 20px 24px;
-      background-color: #252525;
-      border-bottom: 1px solid #333;
-      border-radius: 12px 12px 0 0;
+      flex: 0 0 48px;
+      padding: 0 14px 0 16px;
+      background: #242831;
+      border-bottom: 1px solid #343841;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     .csrf-modal-title {
-      color: #00bcd4;
-      font-size: 20px;
+      color: #f2f4f8;
+      font-size: 15px;
       font-weight: 600;
-      letter-spacing: 0.5px;
+      letter-spacing: 0;
     }
 
     .csrf-modal-close {
-      background: none;
-      border: none;
-      color: #999;
+      width: 30px;
+      height: 30px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      color: #aeb4bf;
       cursor: pointer;
-      font-size: 24px;
-      padding: 8px;
-      transition: color 0.2s;
+      font-size: 20px;
+      line-height: 1;
     }
 
     .csrf-modal-close:hover {
-      color: #fff;
+      background: #2c313b;
+      border-color: #3d4350;
+      color: #f2f4f8;
     }
 
     .csrf-modal-body {
-      padding: 24px;
-      overflow-y: auto;
-      max-height: calc(90vh - 70px);
+      flex: 1 1 auto;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      overflow: hidden;
     }
 
     .csrf-options {
-      background-color: #252525;
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 24px;
-      border: 1px solid #333;
+      min-width: 0;
+      background: #20242b;
+      border-right: 1px solid #343841;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
-    .csrf-select {
+    .csrf-section-label {
+      color: #8f96a3;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .csrf-request-summary {
+      color: #b8bec9;
+      font-size: 12px;
+      line-height: 1.4;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .csrf-techniques {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .csrf-technique {
       width: 100%;
-      padding: 10px 12px;
-      background-color: #2d2d2d;
-      color: #fff;
-      border: 1px solid #444;
-      border-radius: 6px;
-      margin-bottom: 12px;
-      font-size: 14px;
-      transition: border-color 0.2s;
+      height: 30px;
+      padding: 0 10px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      color: #c5cad3;
+      cursor: pointer;
+      font-size: 13px;
+      text-align: left;
     }
 
-    .csrf-select:hover {
-      border-color: #666;
+    .csrf-technique:hover {
+      background: #2a2e36;
+      color: #f2f4f8;
     }
 
-    .csrf-select:focus {
-      border-color: #00bcd4;
-      outline: none;
+    .csrf-technique.is-active {
+      background: #303845;
+      border-color: #4e5d70;
+      color: #ffffff;
     }
 
     .csrf-checkbox-label {
       display: flex;
       align-items: center;
-      gap: 10px;
-      color: #ddd;
-      font-size: 14px;
+      gap: 8px;
+      color: #c5cad3;
+      font-size: 13px;
+      line-height: 1.4;
+      padding-top: 10px;
+      border-top: 1px solid #343841;
+    }
+
+    .csrf-checkbox-label input {
+      width: 14px;
+      height: 14px;
+      accent-color: #4e83b8;
     }
 
     .csrf-output {
-      background-color: #252525;
-      padding: 20px;
-      border-radius: 8px;
-      border: 1px solid #333;
+      min-width: 0;
+      min-height: 0;
+      background: #1f2229;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
     }
 
     .csrf-output-header {
+      flex: 0 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .csrf-output-title {
+      min-width: 0;
+      color: #f2f4f8;
+      font-size: 14px;
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .csrf-button-group {
+      flex: 0 0 auto;
       display: flex;
-      gap: 12px;
+      gap: 8px;
     }
 
     .csrf-button {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 6px;
-      color: #fff;
+      height: 32px;
+      padding: 0 12px;
+      border: 1px solid #424957;
+      border-radius: 4px;
+      background: #2a2f38;
+      color: #e4e8ef;
       cursor: pointer;
+      font-size: 13px;
       font-weight: 500;
-      font-size: 14px;
-      transition: transform 0.1s, opacity 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
     .csrf-button:hover {
-      transform: translateY(-1px);
+      background: #333946;
+      border-color: #566174;
     }
 
     .csrf-button:active {
-      transform: translateY(0);
+      background: #252a32;
     }
 
-        .csrf-button-copy {
-      background-color: #a0213e;
+    .csrf-button-copy {
+      background: #9f2849;
+      border-color: #b33c5b;
+      color: #ffffff;
     }
 
     .csrf-button-copy:hover {
-      background-color: #a0213e;
+      background: #b33254;
+      border-color: #c94c6a;
     }
 
-    .csrf-button-download {
-      background-color: #a0213e;
+    .csrf-target-line {
+      flex: 0 0 auto;
+      margin-bottom: 10px;
+      color: #9aa2af;
+      font-size: 12px;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
     }
-
-    .csrf-button-download:hover {
-      background-color: #a0213e;
-    }
-
 
     .csrf-code-editor {
+      flex: 1 1 auto;
+      min-height: 0;
       width: 100%;
-      min-height: 300px;
-      resize: vertical;
-      background-color: #2d2d2d;
-      color: #eee;
-      border: 1px solid #444;
-      border-radius: 6px;
-      padding: 16px;
-      font-family: 'Fira Code', Consolas, Monaco, monospace;
-      font-size: 14px;
-      line-height: 1.5;
+      resize: none;
+      background: #171a20;
+      color: #f2f4f8;
+      border: 1px solid #363c47;
+      border-radius: 4px;
+      padding: 12px;
+      font-family: Consolas, Monaco, 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.55;
       tab-size: 2;
       -moz-tab-size: 2;
       outline: none;
-      transition: border-color 0.2s;
     }
 
     .csrf-code-editor:focus {
-      border-color: #00bcd4;
+      border-color: #5b6b80;
     }
 
     .csrf-footer {
-      padding: 16px 24px;
-      background-color: #252525;
-      border-top: 1px solid #333;
-      border-radius: 0 0 12px 12px;
+      flex: 0 0 34px;
+      padding: 0 16px;
+      background: #20242b;
+      border-top: 1px solid #343841;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -192,26 +253,48 @@ export async function init(sdk) {
 
     .csrf-footer-links {
       display: flex;
-      gap: 16px;
+      gap: 14px;
     }
 
     .csrf-footer-link {
-      color: #00bcd4;
+      color: #9da6b4;
       text-decoration: none;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: color 0.2s;
+      font-size: 12px;
     }
 
     .csrf-footer-link:hover {
-      color: #26c6da;
+      color: #f2f4f8;
     }
 
-    .csrf-footer-link svg {
-      width: 16px;
-      height: 16px;
+    .csrf-version {
+      color: #7d8592;
+      font-size: 12px;
+    }
+
+    @media (max-width: 760px) {
+      .csrf-modal-overlay {
+        padding: 12px;
+      }
+
+      .csrf-modal {
+        width: calc(100vw - 24px);
+        height: calc(100vh - 24px);
+      }
+
+      .csrf-modal-body {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto minmax(0, 1fr);
+      }
+
+      .csrf-options {
+        border-right: 0;
+        border-bottom: 1px solid #343841;
+      }
+
+      .csrf-techniques {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
     [data-tooltip] {
@@ -239,10 +322,75 @@ export async function init(sdk) {
   const sanitizeValue = (value) => {
     return String(value).replace(/"/g, '&quot;');
   };
+
+  const parseUrlEncodedParams = (data) => {
+    return Array.from(new URLSearchParams(data).entries()).map(([name, value]) => ({
+      name: sanitizeValue(name),
+      value: sanitizeValue(value)
+    }));
+  };
+
+  const parseQueryParams = (requestLine) => {
+    const target = requestLine.match(/^\S+\s+(\S+)\s+HTTP/i)?.[1] ?? '';
+    const queryStart = target.indexOf('?');
+    if (queryStart === -1) {
+      return [];
+    }
+
+    const fragmentStart = target.indexOf('#', queryStart);
+    const query = target.slice(queryStart + 1, fragmentStart === -1 ? undefined : fragmentStart);
+    return parseUrlEncodedParams(query);
+  };
+
+  const stripQueryString = (url) => {
+    const queryStart = url.indexOf('?');
+    return queryStart === -1 ? url : url.slice(0, queryStart);
+  };
+
+  const parseMultipartParams = (body, contentType) => {
+    const boundary = contentType.match(/boundary=(?:"([^"]+)"|([^;]+))/i)?.[1] ?? contentType.match(/boundary=(?:"([^"]+)"|([^;]+))/i)?.[2];
+    if (!boundary) {
+      return [];
+    }
+
+    return body
+      .split(`--${boundary}`)
+      .map(part => part.trim())
+      .filter(part => part && part !== '--')
+      .map(part => {
+        const [headers, ...contentParts] = part.split(/\r?\n\r?\n/);
+        const disposition = headers.match(/content-disposition:[^\r\n]+/i)?.[0] ?? '';
+        const name = disposition.match(/name="([^"]+)"/i)?.[1];
+        const isFile = /filename="/i.test(disposition);
+        if (!name || isFile) {
+          return undefined;
+        }
+
+        return {
+          name: sanitizeValue(name),
+          value: sanitizeValue(contentParts.join('\n\n').replace(/\r?\n--$/, '').trim())
+        };
+      })
+      .filter(Boolean);
+  };
+
+  const parsePlainTextParams = (body) => {
+    return body
+      .split(/\r?\n|&/)
+      .filter(param => param.includes('='))
+      .map(param => {
+        const [name, ...values] = param.split('=');
+        return {
+          name: sanitizeValue(name.trim()),
+          value: sanitizeValue(values.join('=').trim())
+        };
+      });
+  };
   
   const parseRequestParams = (request) => {
     try {
-      const lines = request.split('\n');
+      const lines = request.split(/\r?\n/);
+      const requestLine = lines[0] ?? '';
       let body = '';
       let contentType = '';
       let isBody = false;
@@ -252,17 +400,17 @@ export async function init(sdk) {
         if (line.toLowerCase().startsWith('content-type:')) {
           contentType = line.split(':')[1].trim();
         }
-        if (line.trim() === '') {
+        if (!isBody && line.trim() === '') {
           isBody = true;
           continue;
         }
         if (isBody) {
-          body += line;
+          body += `${body ? '\n' : ''}${line}`;
         }
       }
 
       if (!body.trim()) {
-        return [];
+        return parseQueryParams(requestLine);
       }
 
       if (contentType.includes('application/json')) {
@@ -278,15 +426,15 @@ export async function init(sdk) {
         }
       }
 
-      return body.split('&')
-        .filter(param => param.includes('='))
-        .map(param => {
-          const [name, ...values] = param.split('=');
-          return {
-            name: sanitizeValue(decodeURIComponent(name)),
-            value: sanitizeValue(decodeURIComponent(values.join('=')))
-          };
-        });
+      if (contentType.includes('multipart/form-data')) {
+        return parseMultipartParams(body, contentType);
+      }
+
+      if (contentType.includes('text/plain')) {
+        return parsePlainTextParams(body);
+      }
+
+      return parseUrlEncodedParams(body);
       } catch (error) {
           console.error('Parameter parsing error:', error);
           return [];
@@ -547,6 +695,44 @@ ${formFields}
   return `<script>window.location='data:text/html;base64,${btoa(html)}';</script>`;
 };
 
+const techniques = [
+  "Standard HTML Form",
+  "URL-encoded form",
+  "Multipart form",
+  "Plain text form",
+  "SVG-based CSRF",
+  "XHR-based CSRF",
+  "Iframe-based CSRF",
+  "Meta Refresh CSRF",
+  "WebSocket CSRF",
+  "Data URI CSRF"
+];
+
+const generatePoc = (technique, method, url, params, autoSubmit) => {
+  switch(technique) {
+    case "URL-encoded form":
+      return generateUrlEncodedCsrf(method, url, params, autoSubmit);
+    case "Multipart form":
+      return generateMultipartCsrf(method, url, params, autoSubmit);
+    case "Plain text form":
+      return generatePlainTextCsrf(method, url, params, autoSubmit);
+    case "SVG-based CSRF":
+      return generateSvgCsrf(method, url, params, 200);
+    case "XHR-based CSRF":
+      return generateXhrCsrf(method, url, params, autoSubmit);
+    case "Iframe-based CSRF":
+      return generateIframeCsrf(method, url, params, autoSubmit);
+    case "Meta Refresh CSRF":
+      return generateMetaRefreshCsrf(method, url, params);
+    case "WebSocket CSRF":
+      return generateWebSocketCsrf(method, url, params);
+    case "Data URI CSRF":
+      return generateDataUriCsrf(method, url, params, autoSubmit);
+    default:
+      return generateStandardPoc(method, url, params, autoSubmit);
+  }
+};
+
 const addModalKeyboardHandling = (overlay) => {
   const handleKeydown = (e) => {
     if (e.key === 'Escape') {
@@ -560,6 +746,7 @@ const addModalKeyboardHandling = (overlay) => {
 
 const showCsrfModal = (request, url, method) => {
   const params = parseRequestParams(request);
+  const targetUrl = method.toUpperCase() === 'GET' && params.length > 0 ? stripQueryString(url) : url;
   
   if (params.length === 0) {
     sdk.window.showToast('No parameters found in request', { variant: 'warning' });
@@ -585,7 +772,7 @@ const showCsrfModal = (request, url, method) => {
   
   const title = document.createElement('div');
   title.className = 'csrf-modal-title';
-  title.textContent = 'Advanced CSRF PoC Generator';
+  title.textContent = 'CSRF PoC Generator';
   
   const closeButton = document.createElement('button');
   closeButton.className = 'csrf-modal-close';
@@ -600,28 +787,40 @@ const showCsrfModal = (request, url, method) => {
   
   const options = document.createElement('div');
   options.className = 'csrf-options';
+
+  const requestSummary = document.createElement('div');
+  requestSummary.className = 'csrf-request-summary';
+  requestSummary.textContent = `${method.toUpperCase()} - ${params.length} parameter${params.length === 1 ? '' : 's'}`;
+
+  const techniqueLabel = document.createElement('div');
+  techniqueLabel.className = 'csrf-section-label';
+  techniqueLabel.textContent = 'Payload';
   
-  const select = document.createElement('select');
-  select.className = 'csrf-select';
-  
-  const techniques = [
-    "Standard HTML Form",
-    "URL-encoded form",
-    "Multipart form",
-    "Plain text form",
-    "SVG-based CSRF",
-    "XHR-based CSRF",
-    "Iframe-based CSRF",
-    "Meta Refresh CSRF",
-    "WebSocket CSRF",
-    "Data URI CSRF"
-  ];
+  let selectedTechnique = techniques[0];
+  const techniqueButtons = [];
+  const techniqueList = document.createElement('div');
+  techniqueList.className = 'csrf-techniques';
+
+  const syncTechniqueButtons = () => {
+    techniqueButtons.forEach(({ button, tech }) => {
+      button.classList.toggle('is-active', tech === selectedTechnique);
+    });
+  };
   
   techniques.forEach(tech => {
-    const option = document.createElement('option');
-    option.value = tech;
-    option.textContent = tech;
-    select.appendChild(option);
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'csrf-technique';
+    button.textContent = tech;
+    button.onclick = () => {
+      selectedTechnique = tech;
+      syncTechniqueButtons();
+      const newOutput = updateOutput();
+      currentOutput.replaceWith(newOutput);
+      currentOutput = newOutput;
+    };
+    techniqueButtons.push({ button, tech });
+    techniqueList.appendChild(button);
   });
 
   const checkboxLabel = document.createElement('label');
@@ -632,45 +831,15 @@ const showCsrfModal = (request, url, method) => {
   checkbox.checked = true;
   
   checkboxLabel.appendChild(checkbox);
-  checkboxLabel.appendChild(document.createTextNode('Include auto-submit script (where applicable)'));
+  checkboxLabel.appendChild(document.createTextNode('Auto-submit when supported'));
 
-  options.appendChild(select);
+  options.appendChild(requestSummary);
+  options.appendChild(techniqueLabel);
+  options.appendChild(techniqueList);
   options.appendChild(checkboxLabel);
 
   const updateOutput = () => {
-    let poc;
-    
-    switch(select.value) {
-      case "URL-encoded form":
-        poc = generateUrlEncodedCsrf(method, url, params, checkbox.checked);
-        break;
-      case "Multipart form":
-        poc = generateMultipartCsrf(method, url, params, checkbox.checked);
-        break;
-      case "Plain text form":
-        poc = generatePlainTextCsrf(method, url, params, checkbox.checked);
-        break;
-      case "SVG-based CSRF":
-        poc = generateSvgCsrf(method, url, params, 200);
-        break;
-      case "XHR-based CSRF":
-        poc = generateXhrCsrf(method, url, params, checkbox.checked);
-        break;
-      case "Iframe-based CSRF":
-        poc = generateIframeCsrf(method, url, params, checkbox.checked);
-        break;
-      case "Meta Refresh CSRF":
-        poc = generateMetaRefreshCsrf(method, url, params);
-        break;
-      case "WebSocket CSRF":
-        poc = generateWebSocketCsrf(method, url, params);
-        break;
-      case "Data URI CSRF":
-        poc = generateDataUriCsrf(method, url, params, checkbox.checked);
-        break;
-      default:
-        poc = generateStandardPoc(method, url, params, checkbox.checked);
-    }
+    const poc = generatePoc(selectedTechnique, method, targetUrl, params, checkbox.checked);
 
     const output = document.createElement('div');
     output.className = 'csrf-output';
@@ -679,18 +848,19 @@ const showCsrfModal = (request, url, method) => {
     outputHeader.className = 'csrf-output-header';
     
     const outputTitle = document.createElement('div');
-    outputTitle.textContent = 'Generated PoC:';
+    outputTitle.className = 'csrf-output-title';
+    outputTitle.textContent = selectedTechnique;
     
     const buttonGroup = document.createElement('div');
     buttonGroup.className = 'csrf-button-group';
     
     const copyButton = document.createElement('button');
     copyButton.className = 'csrf-button csrf-button-copy';
-    copyButton.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy PoC';
+    copyButton.textContent = 'Copy';
     
     const downloadButton = document.createElement('button');
     downloadButton.className = 'csrf-button csrf-button-download';
-    downloadButton.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>Download';
+    downloadButton.textContent = 'Download';
     
     const editor = document.createElement('textarea');
     editor.className = 'csrf-code-editor';
@@ -703,7 +873,7 @@ const showCsrfModal = (request, url, method) => {
     };
     
     downloadButton.onclick = () => {
-      const isSvg = select.value === "SVG-based CSRF";
+      const isSvg = selectedTechnique === "SVG-based CSRF";
       const blob = new Blob([editor.value], { 
         type: isSvg ? 'image/svg+xml' : 'text/html' 
       });
@@ -722,9 +892,8 @@ const showCsrfModal = (request, url, method) => {
     outputHeader.appendChild(buttonGroup);
     
     const urlDisplay = document.createElement('div');
-    urlDisplay.textContent = `Target URL: ${url}`;
-    urlDisplay.style.marginBottom = '12px';
-    urlDisplay.style.color = '#888';
+    urlDisplay.className = 'csrf-target-line';
+    urlDisplay.textContent = `Target URL: ${targetUrl}`;
     
     output.appendChild(outputHeader);
     output.appendChild(urlDisplay);
@@ -734,12 +903,7 @@ const showCsrfModal = (request, url, method) => {
   };
 
   let currentOutput = updateOutput();
-  
-  select.addEventListener('change', () => {
-    const newOutput = updateOutput();
-    currentOutput.replaceWith(newOutput);
-    currentOutput = newOutput;
-  });
+  syncTechniqueButtons();
 
   checkbox.addEventListener('change', () => {
     const newOutput = updateOutput();
@@ -752,12 +916,7 @@ const showCsrfModal = (request, url, method) => {
 
   const discordLink = document.createElement('a');
   discordLink.className = 'csrf-footer-link';
-  discordLink.innerHTML = `
-    <svg viewBox="0 0 24 24" fill="currentColor">
-      <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.12-.094.246-.192.372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
-    </svg>
-    Join Discord Server
-  `;
+  discordLink.textContent = 'Discord';
   discordLink.href = '#';
   discordLink.addEventListener('click', (e) => {
     e.preventDefault();
@@ -770,13 +929,7 @@ const showCsrfModal = (request, url, method) => {
 
   const contactLink = document.createElement('a');
   contactLink.className = 'csrf-footer-link';
-  contactLink.innerHTML = `
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-      <path d="M22 6l-10 7L2 6"/>
-    </svg>
-    Contact Me
-  `;
+  contactLink.textContent = 'Contact';
   contactLink.href = '#';
   contactLink.addEventListener('click', (e) => {
     e.preventDefault();
@@ -788,9 +941,8 @@ const showCsrfModal = (request, url, method) => {
   });
 
   const versionInfo = document.createElement('div');
-  versionInfo.style.color = '#666';
-  versionInfo.style.fontSize = '12px';
-  versionInfo.textContent = 'CSRF PoC Generator v1.0.0';
+  versionInfo.className = 'csrf-version';
+  versionInfo.textContent = 'CSRF PoC Generator v1.0.5';
 
   footerLinks.appendChild(discordLink);
   footerLinks.appendChild(contactLink);
@@ -809,23 +961,60 @@ const showCsrfModal = (request, url, method) => {
   document.body.appendChild(overlay);
 };
 
+const getRequestFromContext = async (context) => {
+  if (context.type === 'RequestContext') {
+    return context.request;
+  }
+
+  if (context.type === 'RequestRowContext') {
+    const selectedRequest = context.requests?.[0];
+    if (!selectedRequest?.id) {
+      return undefined;
+    }
+
+    const result = await sdk.graphql.request({ id: selectedRequest.id });
+    return result.request;
+  }
+
+  return undefined;
+};
+
+const getFullUrl = (request, rawRequest, path) => {
+  if (path.startsWith('http')) {
+    return path;
+  }
+
+  const hostMatch = rawRequest.match(/Host:\s*([^\r\n]+)/i);
+  let host = hostMatch ? hostMatch[1].trim() : request.host;
+
+  if (!host && request.host) {
+    host = request.host;
+    const isDefaultPort = (request.isTls && request.port === 443) || (!request.isTls && request.port === 80);
+    if (request.port && !isDefaultPort) {
+      host = `${host}:${request.port}`;
+    }
+  }
+
+  const scheme = request.isTls === false ? 'http' : 'https';
+  return `${scheme}://${host}${path}`;
+};
+
 sdk.commands.register('generate-csrf-poc', {
   name: 'Generate CSRF PoC',
   run: async (context) => {
     try {
-      const request = context.request?.raw;
-      if (!request) {
+      const selectedRequest = await getRequestFromContext(context);
+      const request = selectedRequest?.raw;
+      if (!selectedRequest || !request) {
         sdk.window.showToast('No request selected', { variant: 'error' });
         return;
       }
 
-      const firstLine = request.split('\n')[0];
-      const method = firstLine.split(' ')[0];
-      const urlMatch = request.match(/^(?:POST|GET|PUT|DELETE)\s+(.*?)\s+HTTP/);
-      const path = urlMatch ? urlMatch[1] : '';
-      const hostMatch = request.match(/Host:\s*([^\r\n]+)/i);
-      const host = hostMatch ? hostMatch[1].trim() : '';
-      const fullUrl = path.startsWith('http') ? path : `https://${host}${path}`;
+      const firstLine = request.split(/\r?\n/)[0] ?? '';
+      const method = selectedRequest.method ?? firstLine.split(/\s+/)[0];
+      const urlMatch = firstLine.match(/^\S+\s+(\S+)\s+HTTP/i);
+      const path = urlMatch ? urlMatch[1] : `${selectedRequest.path}${selectedRequest.query ? `?${selectedRequest.query}` : ''}`;
+      const fullUrl = getFullUrl(selectedRequest, request, path);
 
       showCsrfModal(request, fullUrl, method);
 

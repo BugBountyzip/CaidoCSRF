@@ -7,7 +7,8 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/clean.js && pnpm -r build && node scripts/pack.js",
-    "typecheck": "pnpm -r typecheck"
+    "typecheck": "pnpm -r typecheck",
+    "qa:pocs": "node scripts/qa-pocs.js"
   },
   "devDependencies": {
     "@caido/plugin-manifest": "0.1.3",
